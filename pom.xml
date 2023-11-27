@@ -6,7 +6,6 @@
     <modules>
         <module>discord-orchestrator-svc</module>
         <module>discord-orchestrator-dto</module>
-        <module>discord-orchstrator-security</module>
     </modules>
     <parent>
 		<groupId>org.springframework.boot</groupId>
