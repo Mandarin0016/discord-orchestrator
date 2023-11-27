@@ -11,6 +11,6 @@ public record Permission(
         @NotBlank(message = "role cannot be blank")
         String role,
         @Valid
-        List<Action> actions
+        List<PermissionAction> permissionActions
 ) {
 }

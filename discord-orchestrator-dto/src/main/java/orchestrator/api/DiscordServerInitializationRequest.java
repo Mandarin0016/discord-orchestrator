@@ -8,9 +8,10 @@ import java.util.UUID;
 
 @Builder
 public record DiscordServerInitializationRequest(
-
-        @NotNull(message = "discordServerId cannot be null")
-        UUID discordServerId,
+        @NotNull(message = "idempotencyKey cannot be null")
+        UUID idempotencyKey,
+        @NotNull(message = "discordClientId cannot be null")
+        UUID discordClientId,
         @NotNull(message = "workerId cannot be null")
         UUID workerId,
         @Valid

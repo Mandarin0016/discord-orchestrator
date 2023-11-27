@@ -3,7 +3,6 @@ package orchestrator.api;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
-import lombok.Data;
 
 import java.util.List;
 
@@ -18,8 +17,6 @@ public record SetupDetails(
         @Valid
         List<Category> categories,
         @Valid
-        List<Role> roles,
-        @Valid
-        List<AccessRestriction> accessRestrictions
+        List<Role> roles
 ) {
 }

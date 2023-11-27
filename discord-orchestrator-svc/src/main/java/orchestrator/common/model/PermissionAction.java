@@ -1,9 +1,10 @@
-package orchestrator.api;
+package orchestrator.common.model;
 
-public enum Action {
+public enum PermissionAction {
     READ_MESSAGES,
     SEND_MESSAGES,
     EMBED_LINKS,
     CONNECT,
     SPEAK,
+    VIEW
 }
