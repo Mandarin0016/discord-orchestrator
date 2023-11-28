@@ -1,5 +1,7 @@
 package orchestrator.api;
 
+import orchestrator.api.dto.DiscordServerSetupRequest;
+import orchestrator.api.dto.DiscordServerSetupResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,13 +12,13 @@ import static orchestrator.api.Paths.BASE_PATH_V1;
 
 @RestController
 @RequestMapping(BASE_PATH_V1 + "/discord/servers")
-public class DiscordServerInitializationController {
+public class DiscordServerSetupController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public DiscordServerInitializationAcceptedResponse create(@RequestBody DiscordServerInitializationRequest request) {
+    public DiscordServerSetupResponse createSetupRequest(@RequestBody DiscordServerSetupRequest request) {
 
-        return new DiscordServerInitializationAcceptedResponse(UUID.randomUUID(), request.workerId(), OffsetDateTime.now());
+        return new DiscordServerSetupResponse(UUID.randomUUID(), request.workerId(), OffsetDateTime.now());
     }
 
     @GetMapping("{trackingId}")

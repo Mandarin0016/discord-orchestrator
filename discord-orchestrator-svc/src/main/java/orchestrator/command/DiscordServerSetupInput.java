@@ -1,4 +1,4 @@
-package orchestrator.api.command;
+package orchestrator.command;
 
 import lombok.Builder;
 
@@ -13,7 +13,6 @@ public class DiscordServerSetupInput {
     private final String serverName;
     private final String serverDescription;
     private final String iconUrl;
-    private final String splashUrl;
     private final String bannerUrl;
     private final List<DiscordCategoryInput> categories;
     private final List<RoleInput> roles;
@@ -24,7 +23,6 @@ public class DiscordServerSetupInput {
                                     String serverName,
                                     String serverDescription,
                                     String iconUrl,
-                                    String splashUrl,
                                     String bannerUrl,
                                     List<DiscordCategoryInput> categories,
                                     List<RoleInput> roles) {
@@ -34,7 +32,6 @@ public class DiscordServerSetupInput {
         this.serverName = serverName;
         this.serverDescription = serverDescription;
         this.iconUrl = iconUrl;
-        this.splashUrl = splashUrl;
         this.bannerUrl = bannerUrl;
         this.categories = categories;
         this.roles = roles;

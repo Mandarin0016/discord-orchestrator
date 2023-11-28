@@ -1,4 +1,4 @@
-package orchestrator.api;
+package orchestrator.api.dto;
 
 public enum ChannelType {
     TEXT,

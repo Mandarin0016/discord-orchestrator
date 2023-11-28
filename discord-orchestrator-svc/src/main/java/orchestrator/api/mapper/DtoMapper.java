@@ -1,4 +1,4 @@
 package orchestrator.api.mapper;
 
-public class CommandMapper {
+public class DtoMapper {
 }

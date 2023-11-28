@@ -1,4 +1,4 @@
-package orchestrator.api.command;
+package orchestrator.command;
 
 import lombok.Builder;
 import lombok.Getter;
