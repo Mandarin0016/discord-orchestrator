@@ -22,6 +22,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @ManyToOne(targetEntity = DiscordServer.class)
+    @JoinColumn(name = "discord_server_id", referencedColumnName = "id")
     private UUID discordServerId;
     @Size(min = 2)
     String name;

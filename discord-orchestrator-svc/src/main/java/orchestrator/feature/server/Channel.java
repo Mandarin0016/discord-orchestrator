@@ -22,6 +22,7 @@ public class Channel {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @ManyToOne(targetEntity = Category.class)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private UUID categoryId;
     @Size(min = 2)
     private String name;
@@ -30,7 +31,7 @@ public class Channel {
     @Size(min = 2)
     private String topic;
     @OneToMany
-    private List<ChannelPermissions> channelPermissions;
+    private List<ChannelPermission> channelPermissions;
     @NotNull
     private OffsetDateTime createdOn;
     @NotNull
