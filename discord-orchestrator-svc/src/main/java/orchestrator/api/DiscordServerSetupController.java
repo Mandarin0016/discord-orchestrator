@@ -3,6 +3,7 @@ package orchestrator.api;
 import orchestrator.api.dto.DiscordServerSetupRequest;
 import orchestrator.api.dto.DiscordServerSetupResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
@@ -16,7 +17,7 @@ public class DiscordServerSetupController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public DiscordServerSetupResponse createSetupRequest(@RequestBody DiscordServerSetupRequest request) {
+    public DiscordServerSetupResponse createSetupRequest(@Validated @RequestBody DiscordServerSetupRequest request) {
 
         return new DiscordServerSetupResponse(UUID.randomUUID(), request.workerId(), OffsetDateTime.now());
     }
