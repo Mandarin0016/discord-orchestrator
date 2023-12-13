@@ -1,32 +1,32 @@
-package orchestrator.feature.server;
+package orchestrator.feature.server.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.UniqueElements;
+
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.UUID;
-@Builder
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Entity
-@Table
-public class DiscordServer {
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
+public class ServerRole {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @UniqueElements
-    private String clientId;
+    @ManyToOne(targetEntity = DiscordServer.class)
+    @JoinColumn(name = "discord_server_id", referencedColumnName = "id")
+    private UUID discordServerId;
+    @Size(min = 2)
     private String name;
-    private String description;
-    @OneToMany
-    private List<Category> categories;
-    @OneToMany
-    private List<Role> roles;
+    private String color;
+    private boolean hoist;
+    private boolean mentionable;
     @NotNull
     private OffsetDateTime createdOn;
     @NotNull

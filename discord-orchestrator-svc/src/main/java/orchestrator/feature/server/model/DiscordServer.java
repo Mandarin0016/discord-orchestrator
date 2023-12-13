@@ -1,37 +1,31 @@
-package orchestrator.feature.server;
+package orchestrator.feature.server.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import orchestrator.common.model.ChannelType;
-
+import org.hibernate.validator.constraints.UniqueElements;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
-@Entity
-@Table
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 @Builder
-public class Channel {
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class DiscordServer {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @ManyToOne(targetEntity = Category.class)
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private UUID categoryId;
-    @Size(min = 2)
+    @UniqueElements
+    private String clientId;
     private String name;
-    @Enumerated(EnumType.STRING)
-    private ChannelType channelType;
-    @Size(min = 2)
-    private String topic;
+    private String description;
     @OneToMany
-    private List<ChannelPermission> channelPermissions;
+    private List<Category> categories;
+    @OneToMany
+    private List<ServerRole> roles;
     @NotNull
     private OffsetDateTime createdOn;
     @NotNull
@@ -40,5 +34,6 @@ public class Channel {
     private String updatedBy;
     @NotNull
     private String createdBy;
+
 
 }
