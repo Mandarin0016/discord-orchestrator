@@ -2,7 +2,7 @@ package orchestrator.api.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import orchestrator.api.dto.SetupDetails;
+import orchestrator.api.dto.server.SetupDetails;
 import orchestrator.api.properties.DiscordSetupProperties;
 import org.springframework.stereotype.Component;
 

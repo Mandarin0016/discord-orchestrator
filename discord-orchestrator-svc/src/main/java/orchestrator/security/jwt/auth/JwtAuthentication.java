@@ -10,6 +10,7 @@ public class JwtAuthentication implements Authentication {
 
     private boolean isAuthenticated;
     private final String jwt;
+    private AuthenticationMetadata metadata;
 
     public JwtAuthentication(String jwt) {
         this.jwt = jwt;
@@ -21,12 +22,12 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public String getName() {
-        return null;
+        return metadata.getUsername();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return metadata.getAuthorities();
     }
 
     @Override
@@ -41,7 +42,7 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return null;
+        return metadata;
     }
 
     @Override
@@ -52,6 +53,10 @@ public class JwtAuthentication implements Authentication {
     @Override
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
         this.isAuthenticated = isAuthenticated;
+    }
+
+    public void setMetadata(AuthenticationMetadata authenticationMetadata) {
+        this.metadata = authenticationMetadata;
     }
 
     @Override

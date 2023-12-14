@@ -1,6 +1,7 @@
 package orchestrator.api;
 
-import orchestrator.api.dto.DiscordServerSetupRequest;
+import orchestrator.api.dto.server.DiscordServerSetupRequest;
+import orchestrator.api.dto.server.DiscordServerSetupResponse;
 import orchestrator.api.mapper.DtoMapper;
 import orchestrator.server.command.input.DiscordServerSetupInput;
 import orchestrator.server.command.output.DiscordServerSetupOutput;
@@ -32,15 +33,19 @@ public class DiscordServerSetupController {
 
     @PostMapping(consumes = DISCORD_SETUP_REQUEST, produces = DISCORD_SETUP_RESPONSE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<DiscordServerSetupOutput> createSetupRequest(@Validated @RequestBody DiscordServerSetupRequest request) {
+    public ResponseEntity<DiscordServerSetupResponse> createSetupRequest(@Validated @RequestBody DiscordServerSetupRequest request) {
 
         DiscordServerSetupInput discordServerSetupInputCommand = DtoMapper.mapToServerSetupInput(request);
 
-        DiscordServerSetupOutput discordServerSetupOutput = discordServerService.create(discordServerSetupInputCommand);
+        DiscordServerSetupOutput discordServerSetupOutputCommand = discordServerService.create(discordServerSetupInputCommand);
 
-        return ResponseEntity
-                .created(UriComponentsBuilder.fromPath("?trackingNumber={trackingNumber}").buildAndExpand().toUri())
-                .body(discordServerSetupOutput);
+        DiscordServerSetupResponse discordServerSetupResponse = DtoMapper.mapToServerSetupResponse(
+                discordServerSetupOutputCommand);
+
+        return ResponseEntity.created(UriComponentsBuilder.fromPath("?trackingNumber={trackingNumber}")
+                        .buildAndExpand(discordServerSetupResponse.trackingNumber())
+                        .toUri())
+                .body(discordServerSetupResponse);
     }
 
     @GetMapping(produces = DISCORD_SETUP_RESPONSE)

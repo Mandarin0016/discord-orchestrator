@@ -1,5 +1,7 @@
 package orchestrator.security.jwt.provider;
 
+import orchestrator.security.jwt.auth.AuthenticationMetadata;
+import orchestrator.security.jwt.excpetion.UnauthenticatedUserException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -30,12 +32,12 @@ public class AuthenticationJwtProvider implements AuthenticationProvider {
         String jwt = jwtAuthentication.getJwt();
 
         try {
-            decoder.decode(jwt);
+            AuthenticationMetadata metadata = decoder.decode(jwt);
+            ((JwtAuthentication) authentication).setMetadata(metadata);
             authentication.setAuthenticated(true);
         } catch (InvalidBearerTokenException e) {
-            throw new RuntimeException(e);
+            throw new UnauthenticatedUserException();
         }
-
 
         return authentication;
     }

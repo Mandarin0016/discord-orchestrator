@@ -1,4 +1,4 @@
-package orchestrator.api.dto;
+package orchestrator.api.dto.server;
 
 public enum PermissionAction {
     READ_MESSAGES,

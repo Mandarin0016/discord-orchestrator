@@ -4,8 +4,9 @@ import lombok.Builder;
 
 import java.util.List;
 import java.util.UUID;
+import lombok.Getter;
 
-@Builder
+@Getter
 public class DiscordServerSetupInput {
 
     private final UUID idempotencyKey;

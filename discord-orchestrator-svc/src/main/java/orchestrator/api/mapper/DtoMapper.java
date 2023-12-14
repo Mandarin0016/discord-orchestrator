@@ -1,10 +1,13 @@
 package orchestrator.api.mapper;
 
 import lombok.experimental.UtilityClass;
-import orchestrator.api.dto.*;
+import orchestrator.api.dto.server.*;
+import orchestrator.api.dto.user.UserRegister;
 import orchestrator.common.model.ChannelType;
 import orchestrator.common.model.PermissionAction;
 import orchestrator.server.command.input.*;
+import orchestrator.server.command.output.DiscordServerSetupOutput;
+import orchestrator.user.command.UserRegisterInput;
 
 @UtilityClass
 public final class DtoMapper {
@@ -57,6 +60,34 @@ public final class DtoMapper {
         return PermissionInput.builder()
                 .roleName(dto.role())
                 .actions(dto.permissionActions().stream().map(adto -> PermissionAction.valueOf(adto.name())).toList())
+                .build();
+    }
+
+    public static DiscordServerSetupResponse mapToServerSetupResponse(DiscordServerSetupOutput command) {
+
+        return DiscordServerSetupResponse.builder()
+                .id(command.getId())
+                .idempotencyKey(command.getIdempotencyKey())
+                .trackingNumber(command.getTrackingNumber())
+                .discordServerId(command.getDiscordServerId())
+                .workerId(command.getWorkerId())
+                .status(command.getStatus().name())
+                .createdOn(command.getCreatedOn())
+                .updatedOn(command.getUpdatedOn())
+                .createdBy(command.getCreatedBy())
+                .updatedBy(command.getUpdatedBy())
+                .rejectedReason(command.getRejectedReason())
+                .build();
+    }
+
+    public static UserRegisterInput mapToServerSetupResponse(UserRegister dto) {
+
+        return UserRegisterInput.builder()
+                .firstName(dto.firstName())
+                .lastName(dto.lastName())
+                .username(dto.username())
+                .email(dto.email())
+                .password(dto.password())
                 .build();
     }
 }

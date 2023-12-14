@@ -1,4 +1,4 @@
-package orchestrator.api.dto;
+package orchestrator.api.dto.server;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

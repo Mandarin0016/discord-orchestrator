@@ -1,17 +1,20 @@
-package orchestrator.api.dto;
+package orchestrator.api.dto.server;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 import java.util.List;
 
 @Builder
-public record Category(
+public record Channel(
         @NotBlank(message = "name cannot be blank")
         String name,
-        String description,
+        @NotNull
+        ChannelType type,
+        String topic,
         @Valid
-        List<Channel> channels
+        List<Permission> permissions
 ) {
 }

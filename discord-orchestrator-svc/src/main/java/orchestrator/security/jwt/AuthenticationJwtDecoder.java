@@ -6,6 +6,8 @@ import com.nimbusds.jose.proc.*;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.jwt.proc.BadJWTException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import orchestrator.security.jwt.verifier.AuthenticationJwtSignatureVerifier;
 import orchestrator.security.jwt.verifier.AuthenticationJwtClaimsVerifier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +33,12 @@ public class AuthenticationJwtDecoder implements Decoder<AuthenticationMetadata>
 
     @Autowired
     public AuthenticationJwtDecoder(AuthenticationJwtSignatureVerifier signatureVerifier) {
+
         this.signatureVerifier = signatureVerifier;
         this.claimsVerifier = new AuthenticationJwtClaimsVerifier<>();
         this.objectMapper = new ObjectMapper();
     }
+
     public AuthenticationMetadata decode(String token) throws InvalidBearerTokenException {
 
         try {
@@ -45,7 +49,7 @@ public class AuthenticationJwtDecoder implements Decoder<AuthenticationMetadata>
             } else {
                 String jwtString = token.substring("Bearer ".length());
 
-                if (!StringUtils.hasLength(jwtString)){
+                if (!StringUtils.hasLength(jwtString)) {
                     throw new InvalidBearerTokenException("Missing token");
                 }
 
@@ -71,13 +75,10 @@ public class AuthenticationJwtDecoder implements Decoder<AuthenticationMetadata>
             String email = tokenData.get("email").asText();
             String userRole = tokenData.get("userRole").asText();
             String userId = tokenData.get("userId").asText();
-            Set<String> authorities = new HashSet<>();
-            Iterator<JsonNode> authoritiesItr = tokenData.get("authorities").iterator();
-            while (authoritiesItr.hasNext()){
-                String role = authoritiesItr.next().get("role").asText();
-                authorities.add(role);
-            }
-
+            Set<String> authorities = Arrays.stream(claims.getClaim("authorities")
+                            .toString()
+                            .split(","))
+                    .collect(Collectors.toSet());
 
             return AuthenticationMetadata.builder()
                     .setUsername(username)
