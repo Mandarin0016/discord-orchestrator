@@ -20,4 +20,5 @@ public class HexColorValidator implements ConstraintValidator<ValidHexColor, Str
         Matcher matcher = pattern.matcher(value);
         return matcher.matches();
     }
+
 }

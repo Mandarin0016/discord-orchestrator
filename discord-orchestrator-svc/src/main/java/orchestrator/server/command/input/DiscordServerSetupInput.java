@@ -1,4 +1,4 @@
-package orchestrator.command;
+package orchestrator.server.command.input;
 
 import lombok.Builder;
 
