@@ -9,6 +9,7 @@ import orchestrator.server.service.DiscordServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,16 +32,14 @@ public class DiscordServerSetupController {
         this.discordServerService = discordServerService;
     }
 
+    @PreAuthorize("hasAuthority('CREATE_DISCORD_SERVER_SETUP_REQUEST')")
     @PostMapping(consumes = DISCORD_SETUP_REQUEST, produces = DISCORD_SETUP_RESPONSE)
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<DiscordServerSetupResponse> createSetupRequest(@Validated @RequestBody DiscordServerSetupRequest request) {
 
         DiscordServerSetupInput discordServerSetupInputCommand = DtoMapper.mapToServerSetupInput(request);
-
         DiscordServerSetupOutput discordServerSetupOutputCommand = discordServerService.create(discordServerSetupInputCommand);
-
-        DiscordServerSetupResponse discordServerSetupResponse = DtoMapper.mapToServerSetupResponse(
-                discordServerSetupOutputCommand);
+        DiscordServerSetupResponse discordServerSetupResponse = DtoMapper.mapToServerSetupResponse(discordServerSetupOutputCommand);
 
         return ResponseEntity.created(UriComponentsBuilder.fromPath("?trackingNumber={trackingNumber}")
                         .buildAndExpand(discordServerSetupResponse.trackingNumber())

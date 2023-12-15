@@ -13,7 +13,7 @@ public record UserRegister(
         @Email
         String email,
         @Size(min = 8)
-                //TODO: validate password fancy way
+        //TODO: validate password fancy way
         String password
 ) {
 

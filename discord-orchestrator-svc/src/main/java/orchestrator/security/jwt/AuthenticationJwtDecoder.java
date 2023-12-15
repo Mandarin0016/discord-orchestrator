@@ -6,8 +6,7 @@ import com.nimbusds.jose.proc.*;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.jwt.proc.BadJWTException;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import orchestrator.security.jwt.properties.JwtSecurityProperties;
 import orchestrator.security.jwt.verifier.AuthenticationJwtSignatureVerifier;
 import orchestrator.security.jwt.verifier.AuthenticationJwtClaimsVerifier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,6 @@ import orchestrator.security.jwt.excpetion.InvalidBearerTokenException;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 @Service
 public class AuthenticationJwtDecoder implements Decoder<AuthenticationMetadata> {
@@ -30,12 +26,15 @@ public class AuthenticationJwtDecoder implements Decoder<AuthenticationMetadata>
     private final ObjectMapper objectMapper;
     private final AuthenticationJwtClaimsVerifier<SecurityContext> claimsVerifier;
     private final AuthenticationJwtSignatureVerifier signatureVerifier;
+    private final JwtSecurityProperties jwtProperties;
 
     @Autowired
-    public AuthenticationJwtDecoder(AuthenticationJwtSignatureVerifier signatureVerifier) {
+    public AuthenticationJwtDecoder(AuthenticationJwtSignatureVerifier signatureVerifier,
+            JwtSecurityProperties jwtProperties) {
 
         this.signatureVerifier = signatureVerifier;
-        this.claimsVerifier = new AuthenticationJwtClaimsVerifier<>();
+        this.jwtProperties = jwtProperties;
+        this.claimsVerifier = new AuthenticationJwtClaimsVerifier<>(this.jwtProperties);
         this.objectMapper = new ObjectMapper();
     }
 
@@ -47,7 +46,7 @@ public class AuthenticationJwtDecoder implements Decoder<AuthenticationMetadata>
             } else if (!token.startsWith(BEARER_PREFIX)) {
                 throw new InvalidBearerTokenException("Token not formatted correctly");
             } else {
-                String jwtString = token.substring("Bearer ".length());
+                String jwtString = token.substring(BEARER_PREFIX.length());
 
                 if (!StringUtils.hasLength(jwtString)) {
                     throw new InvalidBearerTokenException("Missing token");
@@ -70,23 +69,8 @@ public class AuthenticationJwtDecoder implements Decoder<AuthenticationMetadata>
         this.validateTokenData(tokenData);
 
         try {
-
-            String username = tokenData.get("username").asText();
-            String email = tokenData.get("email").asText();
-            String userRole = tokenData.get("userRole").asText();
-            String userId = tokenData.get("userId").asText();
-            Set<String> authorities = Arrays.stream(claims.getClaim("authorities")
-                            .toString()
-                            .split(","))
-                    .collect(Collectors.toSet());
-
-            return AuthenticationMetadata.builder()
-                    .setUsername(username)
-                    .setEmail(email)
-                    .setUserRole(userRole)
-                    .setUserId(userId)
-                    .setAuthorities(authorities)
-                    .build();
+            return objectMapper.readValue(claims.getClaim("data").toString(),
+                    AuthenticationMetadata.class);
         } catch (Exception var21) {
             throw new InvalidBearerTokenException("Couldn't parse JWT data", var21);
         }

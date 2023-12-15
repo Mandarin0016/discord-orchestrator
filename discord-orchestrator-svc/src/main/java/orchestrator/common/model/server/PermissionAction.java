@@ -1,4 +1,4 @@
-package orchestrator.common.model;
+package orchestrator.common.model.server;
 
 public enum PermissionAction {
     READ_MESSAGES,

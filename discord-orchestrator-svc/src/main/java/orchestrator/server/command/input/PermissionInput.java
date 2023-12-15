@@ -2,7 +2,7 @@ package orchestrator.server.command.input;
 
 import lombok.Builder;
 import lombok.Getter;
-import orchestrator.common.model.PermissionAction;
+import orchestrator.common.model.server.PermissionAction;
 
 import java.util.List;
 

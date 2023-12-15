@@ -2,7 +2,7 @@ package orchestrator.server.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import orchestrator.common.model.ChannelType;
+import orchestrator.common.model.server.ChannelType;
 
 import java.time.OffsetDateTime;
 import java.util.List;

@@ -3,7 +3,7 @@ package orchestrator.server.command.input;
 import lombok.Builder;
 import lombok.Getter;
 
-import orchestrator.common.model.ChannelType;
+import orchestrator.common.model.server.ChannelType;
 
 import java.util.List;
 

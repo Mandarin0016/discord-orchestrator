@@ -1,4 +1,4 @@
-package orchestrator.user.model;
+package orchestrator.common.model.user;
 
 public enum UserRole {
     ADMIN,

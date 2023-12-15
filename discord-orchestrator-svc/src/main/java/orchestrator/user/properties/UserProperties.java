@@ -2,8 +2,8 @@ package orchestrator.user.properties;
 
 import java.util.Set;
 import lombok.Data;
-import orchestrator.user.model.UserAuthority;
-import orchestrator.user.model.UserRole;
+import orchestrator.common.model.user.UserAuthority;
+import orchestrator.common.model.user.UserRole;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 

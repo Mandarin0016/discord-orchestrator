@@ -2,17 +2,21 @@ package orchestrator.api.mapper;
 
 import lombok.experimental.UtilityClass;
 import orchestrator.api.dto.server.*;
+import orchestrator.api.dto.user.UserLogin;
 import orchestrator.api.dto.user.UserRegister;
-import orchestrator.common.model.ChannelType;
-import orchestrator.common.model.PermissionAction;
+import orchestrator.common.model.server.ChannelType;
+import orchestrator.common.model.server.PermissionAction;
+import orchestrator.security.dto.UserAuthenticationDetails;
 import orchestrator.server.command.input.*;
 import orchestrator.server.command.output.DiscordServerSetupOutput;
-import orchestrator.user.command.UserRegisterInput;
+import orchestrator.user.command.input.UserLoginInput;
+import orchestrator.user.command.input.UserRegisterInput;
+import orchestrator.user.command.output.UserProfileOutput;
 
 @UtilityClass
 public final class DtoMapper {
 
-    public static DiscordServerSetupInput mapToServerSetupInput(DiscordServerSetupRequest dto){
+    public static DiscordServerSetupInput mapToServerSetupInput(DiscordServerSetupRequest dto) {
 
         return DiscordServerSetupInput.builder()
                 .idempotencyKey(dto.idempotencyKey())
@@ -80,7 +84,7 @@ public final class DtoMapper {
                 .build();
     }
 
-    public static UserRegisterInput mapToServerSetupResponse(UserRegister dto) {
+    public static UserRegisterInput mapToRegisterInput(UserRegister dto) {
 
         return UserRegisterInput.builder()
                 .firstName(dto.firstName())
@@ -88,6 +92,25 @@ public final class DtoMapper {
                 .username(dto.username())
                 .email(dto.email())
                 .password(dto.password())
+                .build();
+    }
+    public static UserLoginInput mapToLoginInput(UserLogin dto) {
+
+        return UserLoginInput.builder()
+                .usernameOrEmail(dto.usernameOrEmail())
+                .password(dto.password())
+                .build();
+    }
+
+    public static UserAuthenticationDetails mapToUserAuthenticationDetails(UserProfileOutput command) {
+
+        return UserAuthenticationDetails.builder()
+                .userId(command.getId())
+                .email(command.getEmail())
+                .username(command.getUsername())
+                .isActive(command.isActive())
+                .role(command.getRole())
+                .authorities(command.getAuthorities().stream().toList())
                 .build();
     }
 }

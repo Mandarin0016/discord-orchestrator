@@ -1,9 +1,8 @@
 package orchestrator.user.model.mapper;
 
-import java.util.stream.Collectors;
 import lombok.experimental.UtilityClass;
-import orchestrator.user.command.UserRegisterInput;
-import orchestrator.user.command.UserRegisterOutput;
+import orchestrator.user.command.input.UserRegisterInput;
+import orchestrator.user.command.output.UserProfileOutput;
 import orchestrator.user.model.User;
 
 @UtilityClass
@@ -20,17 +19,17 @@ public class EntityMapper {
                 .build();
     }
 
-    public static UserRegisterOutput mapToRegisterOutput(User user) {
+    public static UserProfileOutput mapToProfileOutput(User user) {
 
-        return UserRegisterOutput.builder()
+        return UserProfileOutput.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .isActive(user.isActive())
-                .role(user.getRole().toString())
-                .authorities(user.getAuthorities().stream().map(String::valueOf).collect(Collectors.toSet()))
+                .role(user.getRole())
+                .authorities(user.getAuthorities())
                 .createOn(user.getCreateOn())
                 .updatedOn(user.getUpdatedOn())
                 .build();
