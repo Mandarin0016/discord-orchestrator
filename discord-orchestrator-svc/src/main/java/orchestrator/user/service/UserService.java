@@ -1,9 +1,5 @@
 package orchestrator.user.service;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import lombok.extern.slf4j.Slf4j;
 import orchestrator.user.command.input.UserLoginInput;
 import orchestrator.user.command.input.UserRegisterInput;
@@ -21,11 +17,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserProperties userProperties;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserProperties userProperties) {
+    public UserService(UserRepository userRepository, UserProperties userProperties, PasswordEncoder passwordEncoder) {
 
         this.userRepository = userRepository;
         this.userProperties = userProperties;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserProfileOutput register(UserRegisterInput registerInputCommand) {
@@ -51,7 +49,7 @@ public class UserService {
         }
 
         String userPassword = user.getPassword();
-        String loginPassword = getHashBase64(loginInputCommand.getPassword());
+        String loginPassword = passwordEncoder.getHashBase64(loginInputCommand.getPassword());
 
         if (!userPassword.equals(loginPassword)) {
             throw new UserDomainException("Invalid given credentials for user with id=[%s].".formatted(user.getId()));
@@ -72,23 +70,10 @@ public class UserService {
 
     private void initialize(User user) {
 
-        final String hashedPassword = getHashBase64(user.getPassword());
+        final String hashedPassword = passwordEncoder.getHashBase64(user.getPassword());
         user.setPassword(hashedPassword);
         user.setActive(userProperties.getDefaultAccountState());
         user.setRole(userProperties.getDefaultRole());
         user.setAuthorities(userProperties.getDefaultAuthorities());
-    }
-
-    private static String getHashBase64(String plainText) {
-
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("SHA-512");
-        } catch (NoSuchAlgorithmException e) {
-            throw new UserDomainException("User to initialize user at the moment.");
-        }
-
-        byte[] raw = md.digest(plainText.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(md.digest(raw));
     }
 }

@@ -4,7 +4,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import orchestrator.common.model.user.UserAuthority;
 import orchestrator.common.model.user.UserRole;
+import orchestrator.user.command.input.UserLoginInput;
 import orchestrator.user.command.input.UserRegisterInput;
+import orchestrator.user.command.output.UserProfileOutput;
 import orchestrator.user.exception.UserDomainException;
 import orchestrator.user.model.User;
 import orchestrator.user.properties.UserProperties;
@@ -16,10 +18,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.Set;
 
-import static orchestrator.TestBuilders.aRandomUserBuilder;
-import static orchestrator.TestBuilders.aRandomUserRegisterInputBuilder;
+import static orchestrator.TestBuilders.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,6 +35,8 @@ public class UserServiceUTest {
     private UserRepository userRepository;
     @Mock
     private UserProperties userProperties;
+    @Mock
+    private PasswordEncoder passwordEncoder;
     @Captor
     private ArgumentCaptor<User> userArgumentCaptor;
     @InjectMocks
@@ -50,6 +54,7 @@ public class UserServiceUTest {
             boolean accountState = true;
             boolean accountAlreadyExist = false;
             UserRole accountRole = UserRole.USER;
+            String hashedPassword = "hashedPassword";
             Set<UserAuthority> accountAuthorities = Set.of(UserAuthority.CREATE_DISCORD_SERVER_SETUP_REQUEST);
             User savedUser = aRandomUserBuilder()
                     .firstName(registerInput.getFirstName())
@@ -71,9 +76,11 @@ public class UserServiceUTest {
                     .thenReturn(accountAlreadyExist);
             when(userRepository.save(any(User.class)))
                     .thenReturn(savedUser);
+            when(passwordEncoder.getHashBase64(registerInput.getPassword()))
+                    .thenReturn(hashedPassword);
 
             // when
-            userService.register(registerInput);
+            UserProfileOutput registerOutput = userService.register(registerInput);
 
             // then
             verify(userRepository, times(1))
@@ -92,13 +99,14 @@ public class UserServiceUTest {
             assertThat(userToBeSaved.getLastName(), is(registerInput.getLastName()));
             assertThat(userToBeSaved.getEmail(), is(registerInput.getEmail()));
             assertThat(userToBeSaved.getUsername(), is(registerInput.getUsername()));
-            assertThat(userToBeSaved.getPassword(), not(registerInput.getPassword()));
+            assertThat(userToBeSaved.getPassword(), is(hashedPassword));
             assertThat(userToBeSaved.isActive(), is(accountState));
             assertThat(userToBeSaved.getCreateOn(), is(nullValue()));
             assertThat(userToBeSaved.getUpdatedOn(), is(nullValue()));
             assertThat(userToBeSaved.getRole(), is(accountRole));
             assertThat(userToBeSaved.getAuthorities(), hasSize(1));
             assertThat(userToBeSaved.getAuthorities(), is(accountAuthorities));
+            assertCorrectProfileOutput(registerOutput, savedUser);
         }
 
         @Test
@@ -116,25 +124,50 @@ public class UserServiceUTest {
                     .existsByUsernameOrEmail(any(), any());
             verifyNoMoreInteractions(userRepository);
         }
+    }
+
+    @Nested
+    @DisplayName("Tests for method login()")
+    class Login {
 
         @Test
-        void givenInvalidMessageDigestAlgorithm_whenRegister_thenThrowUserDomainException() {
+        void givenValidLoginInput_whenLogin_thenUserSuccessfullyLogin() {
 
             // given
-            UserRegisterInput registerInput = aRandomUserRegisterInputBuilder().build();
-            when(userRepository.existsByUsernameOrEmail(any(), any()))
-                    .thenReturn(false);
-            try (MockedStatic<MessageDigest> mocked = mockStatic(MessageDigest.class)) {
+            UserLoginInput loginInput = aRadonUserLoginInputBuilder().build();
+            boolean accountState = true;
+            User retrievedUser = aRandomUserBuilder()
+                    .username(loginInput.getUsernameOrEmail())
+                    .password(loginInput.getPassword())
+                    .isActive(accountState)
+                    .build();
+            when(userRepository.findByUsernameOrEmail(loginInput.getUsernameOrEmail(),loginInput.getUsernameOrEmail()))
+                    .thenReturn(Optional.of(retrievedUser));
+            when(passwordEncoder.getHashBase64(loginInput.getPassword()))
+                    .thenReturn(retrievedUser.getPassword());
 
-                mocked.when(() -> MessageDigest.getInstance(any())).thenThrow(NoSuchAlgorithmException.class);
+            // when
+            UserProfileOutput loginOutput = userService.login(loginInput);
 
-                // when & then
-                assertThrows(UserDomainException.class, () -> userService.register(registerInput));
-                verifyNoInteractions(userProperties);
-                verify(userRepository, times(1))
-                        .existsByUsernameOrEmail(any(), any());
-                verifyNoMoreInteractions(userRepository);
-            }
+            // then
+            verify(userRepository, times(1))
+                    .findByUsernameOrEmail(loginInput.getUsernameOrEmail(), loginInput.getUsernameOrEmail());
+            verify(passwordEncoder, times(1))
+                    .getHashBase64(loginInput.getPassword());
+            assertCorrectProfileOutput(loginOutput, retrievedUser);
         }
+    }
+
+    private void assertCorrectProfileOutput(UserProfileOutput profileOutput, User user) {
+
+        assertThat(profileOutput.getId(), is(user.getId()));
+        assertThat(profileOutput.getFirstName(), is(user.getFirstName()));
+        assertThat(profileOutput.getLastName(), is(user.getLastName()));
+        assertThat(profileOutput.getUsername(), is(user.getUsername()));
+        assertThat(profileOutput.getEmail(), is(user.getEmail()));
+        assertThat(profileOutput.getRole(), is(user.getRole()));
+        assertThat(profileOutput.getAuthorities(), is(user.getAuthorities()));
+        assertThat(profileOutput.getCreateOn(), is(user.getCreateOn()));
+        assertThat(profileOutput.getUpdatedOn(), is(user.getUpdatedOn()));
     }
 }
