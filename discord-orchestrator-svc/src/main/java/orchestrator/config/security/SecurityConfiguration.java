@@ -45,8 +45,9 @@ public class SecurityConfiguration {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers(HttpMethod.POST, BASE_PATH_V1 + "/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, BASE_PATH_V1 + "/login").permitAll()
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers(HttpMethod.POST, BASE_PATH_V1 + "/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, BASE_PATH_V1 + "/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(authenticationJwtFilter, UsernamePasswordAuthenticationFilter.class)

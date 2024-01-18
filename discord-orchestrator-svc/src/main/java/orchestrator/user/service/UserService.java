@@ -41,7 +41,7 @@ public class UserService {
 
         User user = userRepository.findByUsernameOrEmail(loginInputCommand.getUsernameOrEmail(),
                         loginInputCommand.getUsernameOrEmail())
-                .orElseThrow(() -> new UserDomainException("User with given email or username does not exist."));
+                .orElseThrow(() -> new UserDomainException("Incorrect username or password."));
 
         if (!user.isActive()) {
             log.warn("Deactivated user with id=[%s], email=[%s] attempted login.".formatted(user.getId(), user.getEmail()));
@@ -52,7 +52,7 @@ public class UserService {
         String loginPassword = passwordEncoder.getHashBase64(loginInputCommand.getPassword());
 
         if (!userPassword.equals(loginPassword)) {
-            throw new UserDomainException("Invalid given credentials for user with id=[%s].".formatted(user.getId()));
+            throw new UserDomainException("Incorrect username or password.");
         }
 
         log.info("User with id=[%s], email=[%s] successfully logged in.".formatted(user.getId(), user.getEmail()));

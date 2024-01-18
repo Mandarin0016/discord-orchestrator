@@ -4,6 +4,8 @@ import orchestrator.common.model.user.UserAuthority;
 import orchestrator.common.model.user.UserRole;
 import orchestrator.user.command.input.UserLoginInput;
 import orchestrator.user.command.input.UserRegisterInput;
+import orchestrator.user.command.output.UserProfileOutput;
+import orchestrator.user.command.output.UserProfileOutput.UserProfileOutputBuilder;
 import orchestrator.user.model.User;
 
 import java.time.OffsetDateTime;
@@ -43,6 +45,21 @@ public final class TestBuilders {
         return  UserLoginInput.builder()
                 .usernameOrEmail("ivan.ivan")
                 .password("J1o4r2c3k1!");
+    }
+
+    public static UserProfileOutputBuilder aRandomProfileOutput() {
+
+        return UserProfileOutput.builder()
+                .id(UUID.randomUUID())
+                .firstName("Ivan")
+                .lastName("Ivanov")
+                .username("ivan.ivanov")
+                .email("ivan.ivanov@gtest.com")
+                .isActive(true)
+                .authorities(Set.of(UserAuthority.CREATE_DISCORD_SERVER_SETUP_REQUEST))
+                .role(UserRole.USER)
+                .createOn(OffsetDateTime.now())
+                .updatedOn(OffsetDateTime.now());
     }
 
 }

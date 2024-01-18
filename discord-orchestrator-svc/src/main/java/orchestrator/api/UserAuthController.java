@@ -24,7 +24,7 @@ import static orchestrator.api.Paths.BASE_PATH_V1;
 import static orchestrator.api.mapper.DtoMapper.mapToUserAuthenticationDetails;
 
 @RestController
-@RequestMapping(BASE_PATH_V1)
+@RequestMapping(BASE_PATH_V1 + "/auth")
 public class UserAuthController {
 
     private final UserService userService;
@@ -36,10 +36,9 @@ public class UserAuthController {
         this.authorizationGenerator = authorizationGenerator;
     }
 
-
     @PostMapping(value = "/login", consumes = USER_LOGIN_REQUEST, produces = USER_LOGIN_RESPONSE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<UserAuthentication> login(@RequestBody UserLogin login) {
+    public ResponseEntity<UserAuthentication> login(@Validated @RequestBody UserLogin login) {
 
         UserLoginInput userLoginInputCommand = DtoMapper.mapToLoginInput(login);
         UserProfileOutput userProfileOutputCommand = userService.login(userLoginInputCommand);
@@ -51,7 +50,7 @@ public class UserAuthController {
                 .status(HttpStatus.OK)
                 .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                 .body(UserAuthentication.builder()
-                        .authorizationHeader(authorizationHeader)
+                        .authorization(authorizationHeader)
                         .data(userAuthenticationDetails)
                         .build());
     }
@@ -70,7 +69,7 @@ public class UserAuthController {
                 .status(HttpStatus.CREATED)
                 .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                 .body(UserAuthentication.builder()
-                        .authorizationHeader(authorizationHeader)
+                        .authorization(authorizationHeader)
                         .data(userAuthenticationDetails)
                         .build());
     }

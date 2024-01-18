@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record UserAuthentication(
-        String authorizationHeader,
+        String authorization,
         Object data
 ) {
 

@@ -2,7 +2,9 @@ package orchestrator.api.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
+@Builder
 public record UserRegister(
         @Size(min = 2)
         String firstName,

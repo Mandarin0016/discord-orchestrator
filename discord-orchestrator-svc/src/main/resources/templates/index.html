@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beautiful Index Page</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(45deg, #3498db, #2574a9, #1b529e, #144184, #10315f, #0c2546, #091a32, #060f1e, #040a14, #02060a);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .navbar {
+      background-color: #2980b9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+    }
+
+    .brand {
+      font-size: 1.5em;
+    }
+
+    .buttons-container {
+      display: flex;
+    }
+
+    .button {
+      background-color: #3498db;
+      color: #fff;
+      padding: 10px;
+      margin-left: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #2980b9;
+    }
+
+    #clock {
+      font-size: 2em;
+      margin: 20px 0;
+    }
+
+    #image-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    #image-container img {
+      max-width: 100%;
+      max-height: 300px;
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="brand">Discord Orchestrator</div>
+  <div class="buttons-container">
+    <a th:href="@{/login}"><button class="button">Login</button></a>
+    <a th:href="@{/register}"><button class="button">Register</button></a>
+  </div>
+</div>
+
+<div id="clock"></div>
+
+<div id="image-container">
+  <img src="path/to/image1.jpg" alt="Image 1">
+  <img src="path/to/image2.jpg" alt="Image 2">
+</div>
+
+<script>
+  function updateClock() {
+    var now = new Date();
+    var hours = now.getHours().toString().padStart(2, '0');
+    var minutes = now.getMinutes().toString().padStart(2, '0');
+    var seconds = now.getSeconds().toString().padStart(2, '0');
+    document.getElementById('clock').innerText = hours + ':' + minutes + ':' + seconds;
+  }
+
+  setInterval(updateClock, 1000);
+
+  updateClock();
+</script>
+
+</body>
+</html>
