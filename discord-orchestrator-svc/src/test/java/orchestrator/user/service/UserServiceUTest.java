@@ -19,6 +19,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 
 import static orchestrator.TestBuilders.*;
@@ -155,6 +156,56 @@ public class UserServiceUTest {
             verify(passwordEncoder, times(1))
                     .getHashBase64(loginInput.getPassword());
             assertCorrectProfileOutput(loginOutput, retrievedUser);
+        }
+
+        @Test
+        void givenInvalidUsername_whenLogin_thenThrowUserDomainException() {
+
+            // given
+            UserLoginInput loginInput = aRadonUserLoginInputBuilder().build();
+            when(userRepository.findByUsernameOrEmail(any(), any()))
+                    .thenReturn(Optional.empty());
+
+            // when & then
+            assertThrows(UserDomainException.class, () -> userService.login(loginInput));
+        }
+
+        @Test
+        void givenInactiveUser_whenLogin_thenThrowUserDomainException() {
+
+            // given
+            UserLoginInput loginInput = aRadonUserLoginInputBuilder().build();
+            boolean accountState = false;
+            User retrievedUser = aRandomUserBuilder()
+                    .username(loginInput.getUsernameOrEmail())
+                    .password(loginInput.getPassword())
+                    .isActive(accountState)
+                    .build();
+            when(userRepository.findByUsernameOrEmail(any(), any()))
+                    .thenReturn(Optional.of(retrievedUser));
+
+            // when & then
+            assertThrows(UserDomainException.class, () -> userService.login(loginInput));
+        }
+
+        @Test
+        void givenInvalidPassword_whenLogin_thenThrowUserDomainException() {
+
+            // given
+            UserLoginInput loginInput = aRadonUserLoginInputBuilder().build();
+            boolean accountState = true;
+            User retrievedUser = aRandomUserBuilder()
+                    .username(loginInput.getUsernameOrEmail())
+                    .password("RandomPassword123!")
+                    .isActive(accountState)
+                    .build();
+            when(userRepository.findByUsernameOrEmail(any(), any()))
+                    .thenReturn(Optional.of(retrievedUser));
+            when(passwordEncoder.getHashBase64(loginInput.getPassword()))
+                    .thenReturn(loginInput.getPassword());
+
+            // when & then
+            assertThrows(UserDomainException.class, () -> userService.login(loginInput));
         }
     }
 
