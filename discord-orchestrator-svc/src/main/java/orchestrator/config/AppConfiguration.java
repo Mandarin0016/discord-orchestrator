@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Import({
-        JacksonConfig.class
+        JacksonConfiguration.class
 })
 @Configuration
 @EnableConfigurationProperties({UserProperties.class})

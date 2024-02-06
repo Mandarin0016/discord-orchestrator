@@ -1,14 +1,14 @@
 package orchestrator.user.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.jose.proc.SecurityContext;
+
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 import orchestrator.api.ExceptionAdvice;
 import orchestrator.common.model.user.UserAuthority;
 import orchestrator.common.model.user.UserRole;
-import orchestrator.config.JacksonConfig;
+import orchestrator.config.JacksonConfiguration;
 import orchestrator.config.security.SecurityConfiguration;
 import orchestrator.security.dto.UserAuthenticationDetails;
 import orchestrator.security.jwt.AuthenticationJwtDecoder;
@@ -34,7 +34,7 @@ import static orchestrator.common.model.user.UserAuthority.DEFAULT_VIEW;
 
 @Import({
         ExceptionAdvice.class,
-        JacksonConfig.class,
+        JacksonConfiguration.class,
         SecurityConfiguration.class,
         JwtAuthorizationGenerator.class,
         AuthenticationJwtEncoder.class,
