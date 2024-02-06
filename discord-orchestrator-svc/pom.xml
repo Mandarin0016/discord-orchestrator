@@ -88,6 +88,16 @@
             <artifactId>nimbus-jose-jwt</artifactId>
             <version>9.20</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-httpclient</artifactId>
+            <version>13.2</version>
+        </dependency>
     </dependencies>
 
     <properties>
