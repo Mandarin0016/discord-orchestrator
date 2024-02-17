@@ -1,9 +1,7 @@
 package orchestrator.user.service;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import orchestrator.common.model.user.UserAuthority;
-import orchestrator.common.model.user.UserRole;
+import orchestrator.user.model.UserAuthority;
+import orchestrator.user.model.UserRole;
 import orchestrator.user.command.input.UserLoginInput;
 import orchestrator.user.command.input.UserRegisterInput;
 import orchestrator.user.command.output.UserProfileOutput;
@@ -19,7 +17,6 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 
 import static orchestrator.TestBuilders.*;

@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 import orchestrator.api.ExceptionAdvice;
-import orchestrator.common.model.user.UserAuthority;
-import orchestrator.common.model.user.UserRole;
+import orchestrator.user.model.UserAuthority;
+import orchestrator.user.model.UserRole;
 import orchestrator.config.JacksonConfiguration;
 import orchestrator.config.security.SecurityConfiguration;
 import orchestrator.security.dto.UserAuthenticationDetails;
@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static orchestrator.common.model.user.UserAuthority.DEFAULT_VIEW;
+import static orchestrator.user.model.UserAuthority.DEFAULT_VIEW;
 
 @Import({
         ExceptionAdvice.class,

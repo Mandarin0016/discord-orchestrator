@@ -5,8 +5,6 @@ import java.time.OffsetDateTime;
 import java.util.Set;
 import java.util.UUID;
 import lombok.*;
-import orchestrator.common.model.user.UserAuthority;
-import orchestrator.common.model.user.UserRole;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -21,6 +19,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    private String discordId;
+    @Column(nullable = false)
+    private boolean isDiscordAuthorized;
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)

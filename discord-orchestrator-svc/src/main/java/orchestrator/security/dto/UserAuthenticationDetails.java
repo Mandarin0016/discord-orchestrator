@@ -3,8 +3,8 @@ package orchestrator.security.dto;
 import java.util.List;
 import java.util.UUID;
 import lombok.Builder;
-import orchestrator.common.model.user.UserAuthority;
-import orchestrator.common.model.user.UserRole;
+import orchestrator.user.model.UserAuthority;
+import orchestrator.user.model.UserRole;
 
 @Builder
 public record UserAuthenticationDetails(
@@ -13,7 +13,6 @@ public record UserAuthenticationDetails(
         String username,
         boolean isActive,
         UserRole role,
-        List<UserAuthority> authorities)
-{
+        List<UserAuthority> authorities) {
 
 }

@@ -11,6 +11,9 @@ import orchestrator.user.properties.UserProperties;
 import orchestrator.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 @Slf4j
 public class UserService {
@@ -26,6 +29,42 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public User getById(UUID userId, boolean lockRequired) {
+
+        Optional<User> user;
+
+        if (lockRequired) {
+            user = userRepository.findByIdAndLock(userId);
+        } else {
+            user = userRepository.findById(userId);
+        }
+
+        if (user.isEmpty()) {
+            throw new UserDomainException("User with id=[%s] does not exists.".formatted(userId));
+        }
+
+        return user.get();
+    }
+
+    public void updateUserDiscordId(UUID userId, String discordId) {
+
+        User user = getById(userId, true);
+
+        if (user.getDiscordId() != null) {
+            log.info("Updating `user_discord_id` for User with id=[%s]. Transition [%s] -> [%s].".formatted(user.getId(), user.getDiscordId(), discordId));
+        }
+
+        user.setDiscordId(discordId);
+        userRepository.save(user);
+    }
+
+    public void updateUserDiscordAuthorizationStatus(UUID userId, boolean isAuthorized) {
+
+        User user = getById(userId, true);
+        user.setDiscordAuthorized(isAuthorized);
+        userRepository.save(user);
+    }
+
     public UserProfileOutput register(UserRegisterInput registerInputCommand) {
 
         User userToBeSave = EntityMapper.mapToUser(registerInputCommand);
@@ -39,9 +78,7 @@ public class UserService {
 
     public UserProfileOutput login(UserLoginInput loginInputCommand) {
 
-        User user = userRepository.findByUsernameOrEmail(loginInputCommand.getUsernameOrEmail(),
-                        loginInputCommand.getUsernameOrEmail())
-                .orElseThrow(() -> new UserDomainException("Incorrect username or password."));
+        User user = userRepository.findByUsernameOrEmail(loginInputCommand.getUsernameOrEmail(), loginInputCommand.getUsernameOrEmail()).orElseThrow(() -> new UserDomainException("Incorrect username or password."));
 
         if (!user.isActive()) {
             log.warn("Deactivated user with id=[%s], email=[%s] attempted login.".formatted(user.getId(), user.getEmail()));
@@ -75,5 +112,6 @@ public class UserService {
         user.setActive(userProperties.getDefaultAccountState());
         user.setRole(userProperties.getDefaultRole());
         user.setAuthorities(userProperties.getDefaultAuthorities());
+        user.setDiscordAuthorized(false);
     }
 }

@@ -6,8 +6,8 @@ import java.util.Set;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
-import orchestrator.common.model.user.UserAuthority;
-import orchestrator.common.model.user.UserRole;
+import orchestrator.user.model.UserAuthority;
+import orchestrator.user.model.UserRole;
 
 @Builder
 @Getter

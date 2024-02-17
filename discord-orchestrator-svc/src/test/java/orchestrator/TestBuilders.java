@@ -1,7 +1,7 @@
 package orchestrator;
 
-import orchestrator.common.model.user.UserAuthority;
-import orchestrator.common.model.user.UserRole;
+import orchestrator.user.model.UserAuthority;
+import orchestrator.user.model.UserRole;
 import orchestrator.user.command.input.UserLoginInput;
 import orchestrator.user.command.input.UserRegisterInput;
 import orchestrator.user.command.output.UserProfileOutput;

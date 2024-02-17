@@ -10,6 +10,7 @@ import feign.codec.ErrorDecoder;
 import feign.httpclient.ApacheHttpClient;
 import orchestrator.worker.client.GaladrielClient;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.context.annotation.Bean;
