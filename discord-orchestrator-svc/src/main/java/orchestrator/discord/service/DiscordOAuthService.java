@@ -12,6 +12,7 @@ import orchestrator.discord.repository.DiscordOAuthRepository;
 import orchestrator.user.model.User;
 import orchestrator.user.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
@@ -44,11 +45,12 @@ public class DiscordOAuthService {
         log.info("Initiating discord authorization process for User with id=[%s].".formatted(user.getId()));
 
         try {
-            DiscordOAuthTokenResponse oAuthTokenResponse = oAuthClient.getAuthorizationToken(oAuthTokenRequest);
+            DiscordOAuthTokenResponse oAuthTokenResponse = oAuthClient.authorizeUser(oAuthTokenRequest);
             upsertDiscordOAuth(userId, oAuthTokenResponse, discordAuthorizationCode != null);
-            log.info("Discord authorization process successfully finished for User with id=[%s].".formatted(user.getId()));
+            log.info("Discord authorization process successfully finished for User with id=[%s].".formatted(userId));
         } catch (Exception e) {
-            //TODO: Unauthorize user if any exception thrown, think of any case.
+            unAuthorizeUser(userId);
+            throw e;
         }
     }
 
@@ -96,4 +98,12 @@ public class DiscordOAuthService {
                 .build();
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void unAuthorizeUser(UUID userId) {
+
+        userService.updateUserDiscordId(userId, null);
+        userService.updateUserDiscordAuthorizationStatus(userId, false);
+        oAuthRepository.deleteByUserId(userId);
+        log.info("User with id=[%s] was successfully un-authorized.".formatted(userId));
+    }
 }

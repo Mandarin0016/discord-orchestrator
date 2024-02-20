@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface DiscordOAuthClient {
 
     @PostMapping(path = "/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    DiscordOAuthTokenResponse getAuthorizationToken(@RequestBody DiscordOAuthTokenRequest discordOAuthTokenRequest);
+    DiscordOAuthTokenResponse authorizeUser(@RequestBody DiscordOAuthTokenRequest discordOAuthTokenRequest);
 
 
     class FeignClientConfiguration {
