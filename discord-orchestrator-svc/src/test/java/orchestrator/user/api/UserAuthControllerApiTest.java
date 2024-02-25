@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static orchestrator.TestBuilders.aRandomProfileOutput;
+import static orchestrator.TestBuilders.aRandomProfileOutputBuilder;
 import static orchestrator.api.ExceptionAdvice.BAD_REQUEST_ERROR_UUID;
 import static orchestrator.api.MediaType.USER_LOGIN_RESPONSE;
 import static orchestrator.api.Paths.BASE_PATH_V1;
@@ -50,7 +50,7 @@ class UserAuthControllerApiTest extends ApiTestBase {
                 .contentType(MediaType.USER_LOGIN_REQUEST)
                 .content(objectMapper.writeValueAsString(userLogin));
         when(userService.login(any(UserLoginInput.class)))
-                .thenReturn(aRandomProfileOutput().build());
+                .thenReturn(aRandomProfileOutputBuilder().build());
 
         // when & then
         mockMvc.perform(request)

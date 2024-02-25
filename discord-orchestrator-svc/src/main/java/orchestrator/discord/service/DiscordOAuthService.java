@@ -61,7 +61,7 @@ public class DiscordOAuthService {
         discordOAuth.setTokenType(oAuthTokenResponse.getTokenType());
         discordOAuth.setAccessToken(oAuthTokenResponse.getAccessToken());
         discordOAuth.setRefreshToken(oAuthTokenResponse.getRefreshToken());
-        discordOAuth.setScopes(oAuthTokenResponse.getScope());
+        discordOAuth.setScopes(oAuthTokenResponse.getScopes());
         discordOAuth.setExpireAt(OffsetDateTime.now().plusSeconds(oAuthTokenResponse.getExpiresIn()));
 
         if (isManualUserAuthorizationTriggered) {
@@ -84,7 +84,7 @@ public class DiscordOAuthService {
         log.info("User with id=[%s] was successfully un-authorized.".formatted(userId));
     }
 
-    private DiscordOAuthTokenRequest mapToDiscordAuthorizationRequest(String discordAuthorizationCode, String refreshToken) {
+    protected DiscordOAuthTokenRequest mapToDiscordAuthorizationRequest(String discordAuthorizationCode, String refreshToken) {
 
         String grantType = refreshToken != null ? oAuthProperties.getGrantTypeRefresh() : oAuthProperties.getGrantTypeNormal();
 
