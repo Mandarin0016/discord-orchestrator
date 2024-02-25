@@ -15,6 +15,10 @@ import java.util.UUID;
 @Table(name = "discord_oauth")
 public class DiscordOAuth {
 
+    public DiscordOAuth(UUID userId) {
+        this.userId = userId;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

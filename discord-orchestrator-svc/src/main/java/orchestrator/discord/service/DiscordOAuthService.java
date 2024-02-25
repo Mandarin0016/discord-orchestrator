@@ -49,41 +49,39 @@ public class DiscordOAuthService {
             upsertDiscordOAuth(userId, oAuthTokenResponse, discordAuthorizationCode != null);
             log.info("Discord authorization process successfully finished for User with id=[%s].".formatted(userId));
         } catch (Exception e) {
-            unAuthorizeUser(userId);
+            deAuthorizeUser(userId);
             throw e;
         }
     }
 
     private void upsertDiscordOAuth(UUID userId, DiscordOAuthTokenResponse oAuthTokenResponse, boolean isManualUserAuthorizationTriggered) {
 
-        DiscordOAuth discordOAuth = oAuthRepository.findByUserId(userId).orElse(null);
-        DiscordOAuth newDiscordOAuth = mapToDiscordOAuth(oAuthTokenResponse);
+        DiscordOAuth discordOAuth = oAuthRepository.findByUserId(userId).orElse(new DiscordOAuth(userId));
 
-        if (discordOAuth != null) {
-            newDiscordOAuth.setId(discordOAuth.getId());
-        }
+        discordOAuth.setTokenType(oAuthTokenResponse.getTokenType());
+        discordOAuth.setAccessToken(oAuthTokenResponse.getAccessToken());
+        discordOAuth.setRefreshToken(oAuthTokenResponse.getRefreshToken());
+        discordOAuth.setScopes(oAuthTokenResponse.getScope());
+        discordOAuth.setExpireAt(OffsetDateTime.now().plusSeconds(oAuthTokenResponse.getExpiresIn()));
 
-        if (discordOAuth == null || isManualUserAuthorizationTriggered) {
+        if (isManualUserAuthorizationTriggered) {
             String authHeader = "%s %s".formatted(oAuthTokenResponse.getTokenType(), oAuthTokenResponse.getAccessToken());
             DiscordUser discordUserInfo = apiClient.getUserDetails(authHeader);
-            newDiscordOAuth.setDiscordUserId(discordUserInfo.getId());
-            newDiscordOAuth.setUserId(userId);
+            discordOAuth.setDiscordUserId(discordUserInfo.getId());
             userService.updateUserDiscordId(userId, discordUserInfo.getId());
+            userService.updateUserDiscordAuthorizationStatus(userId, true);
         }
 
-        userService.updateUserDiscordAuthorizationStatus(userId, true);
-        oAuthRepository.save(newDiscordOAuth);
+        oAuthRepository.save(discordOAuth);
     }
 
-    private DiscordOAuth mapToDiscordOAuth(DiscordOAuthTokenResponse oAuthTokenResponse) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void deAuthorizeUser(UUID userId) {
 
-        return DiscordOAuth.builder()
-                .tokenType(oAuthTokenResponse.getTokenType())
-                .accessToken(oAuthTokenResponse.getAccessToken())
-                .refreshToken(oAuthTokenResponse.getRefreshToken())
-                .scopes(oAuthTokenResponse.getScope())
-                .expireAt(OffsetDateTime.now().plusSeconds(oAuthTokenResponse.getExpiresIn()))
-                .build();
+        userService.updateUserDiscordId(userId, null);
+        userService.updateUserDiscordAuthorizationStatus(userId, false);
+        oAuthRepository.deleteByUserId(userId);
+        log.info("User with id=[%s] was successfully un-authorized.".formatted(userId));
     }
 
     private DiscordOAuthTokenRequest mapToDiscordAuthorizationRequest(String discordAuthorizationCode, String refreshToken) {
@@ -96,14 +94,5 @@ public class DiscordOAuthService {
                 .redirectUri(oAuthProperties.getRedirectUri())
                 .refreshToken(refreshToken)
                 .build();
-    }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void unAuthorizeUser(UUID userId) {
-
-        userService.updateUserDiscordId(userId, null);
-        userService.updateUserDiscordAuthorizationStatus(userId, false);
-        oAuthRepository.deleteByUserId(userId);
-        log.info("User with id=[%s] was successfully un-authorized.".formatted(userId));
     }
 }

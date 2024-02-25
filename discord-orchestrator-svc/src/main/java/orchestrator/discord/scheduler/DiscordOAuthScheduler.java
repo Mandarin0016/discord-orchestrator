@@ -23,7 +23,7 @@ public class DiscordOAuthScheduler {
         this.discordOAuthService = discordOAuthService;
     }
 
-    @Scheduled(cron = "0 * * ? * *")
+    @Scheduled(cron = "0 0 * ? * *")
     public void refreshDiscordAccessToken() {
 
         log.info("Fetching all pending authorizations for refresh.");
