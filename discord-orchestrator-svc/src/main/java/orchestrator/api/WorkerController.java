@@ -1,7 +1,5 @@
 package orchestrator.api;
 
-import orchestrator.worker.client.GaladrielClient;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,15 +7,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/workers")
 public class WorkerController {
 
-    private final GaladrielClient galadrielClient;
-
-    public WorkerController(GaladrielClient galadrielClient) {
-        this.galadrielClient = galadrielClient;
-    }
-
-    @GetMapping
-    public String getGaladrielName() {
-        return galadrielClient.getInformationFromGaladriel("discord-orchestrator");
-    }
 
 }

@@ -1,4 +1,4 @@
-package orchestrator.user.properties;
+package orchestrator.user.property;
 
 import java.util.Set;
 import lombok.Data;

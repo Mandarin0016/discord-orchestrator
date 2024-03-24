@@ -7,7 +7,7 @@ import orchestrator.user.command.output.UserProfileOutput;
 import orchestrator.user.exception.UserDomainException;
 import orchestrator.user.model.User;
 import orchestrator.user.model.mapper.EntityMapper;
-import orchestrator.user.properties.UserProperties;
+import orchestrator.user.property.UserProperties;
 import orchestrator.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 

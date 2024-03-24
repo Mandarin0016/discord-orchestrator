@@ -6,6 +6,7 @@
     <modules>
         <module>discord-orchestrator-svc</module>
         <module>dw-galadriel</module>
+        <module>dw-client</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
