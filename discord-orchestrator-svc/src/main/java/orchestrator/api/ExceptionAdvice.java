@@ -34,13 +34,13 @@ public class ExceptionAdvice {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> accessDenied() {
 
-        return getErrorResponseEntity(UNAUTHORIZED_UUID, UNAUTHORIZED, null);
+        return getErrorResponse(UNAUTHORIZED_UUID, UNAUTHORIZED, null);
     }
 
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<ErrorResponse> internalServerError(Throwable throwable) {
 
-        return getErrorResponseEntity(INTERNAL_SERVER_ERROR_UUID, INTERNAL_SERVER_ERROR, throwable.getMessage());
+        return getErrorResponse(INTERNAL_SERVER_ERROR_UUID, INTERNAL_SERVER_ERROR, throwable.getMessage());
     }
 
     @ExceptionHandler({
@@ -55,16 +55,16 @@ public class ExceptionAdvice {
     })
     public ResponseEntity<ErrorResponse> badRequest() {
 
-        return getErrorResponseEntity(BAD_REQUEST_ERROR_UUID, BAD_REQUEST, null);
+        return getErrorResponse(BAD_REQUEST_ERROR_UUID, BAD_REQUEST, null);
     }
 
     @ExceptionHandler(UserDomainException.class)
     public ResponseEntity<ErrorResponse> badRequest(UserDomainException domainException) {
 
-        return getErrorResponseEntity(INTERNAL_SERVER_ERROR_UUID, INTERNAL_SERVER_ERROR, domainException.getMessage());
+        return getErrorResponse(INTERNAL_SERVER_ERROR_UUID, INTERNAL_SERVER_ERROR, domainException.getMessage());
     }
 
-    private static ResponseEntity<ErrorResponse> getErrorResponseEntity(UUID responseId, HttpStatus httpStatus, String data) {
+    private static ResponseEntity<ErrorResponse> getErrorResponse(UUID responseId, HttpStatus httpStatus, String data) {
 
         final ErrorResponse error = ErrorResponse.builder()
                 .errorCode(responseId)
