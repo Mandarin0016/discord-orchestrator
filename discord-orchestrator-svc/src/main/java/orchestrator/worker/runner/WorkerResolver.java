@@ -5,9 +5,11 @@ import orchestrator.worker.property.WorkerProperties;
 import orchestrator.worker.repository.WorkerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 @Component
+@ConditionalOnBean({WorkerProperties.class})
 public class WorkerResolver implements CommandLineRunner {
 
     private final WorkerProperties workerProperties;

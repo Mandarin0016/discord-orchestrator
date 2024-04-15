@@ -1,7 +1,7 @@
 package orchestrator.api;
 
 import orchestrator.discord.client.DiscordApiClient;
-import orchestrator.discord.oauth.DiscordOAuthProperties;
+import orchestrator.discord.property.DiscordOAuthProperties;
 import orchestrator.discord.service.DiscordOAuthService;
 import orchestrator.security.jwt.auth.AuthenticationMetadata;
 import org.springframework.http.HttpStatus;

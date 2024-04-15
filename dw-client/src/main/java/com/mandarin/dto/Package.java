@@ -15,9 +15,9 @@ public record Package(
         @NotNull
         UUID idempotencyKey,
         @NotNull
-        UUID discordWorkerId,
+        UUID workerId,
         @NotBlank
-        String discordServerId,
+        String serverId,
         Object content,
         @NotNull
         Action action,

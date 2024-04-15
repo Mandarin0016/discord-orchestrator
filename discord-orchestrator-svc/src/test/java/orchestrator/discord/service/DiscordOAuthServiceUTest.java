@@ -6,7 +6,7 @@ import orchestrator.discord.client.dto.DiscordOAuthTokenRequest;
 import orchestrator.discord.client.dto.DiscordOAuthTokenResponse;
 import orchestrator.discord.client.dto.DiscordUser;
 import orchestrator.discord.model.DiscordOAuth;
-import orchestrator.discord.oauth.DiscordOAuthProperties;
+import orchestrator.discord.property.DiscordOAuthProperties;
 import orchestrator.discord.repository.DiscordOAuthRepository;
 import orchestrator.user.exception.UserDomainException;
 import orchestrator.user.model.User;

@@ -48,7 +48,6 @@ public class SecurityConfiguration {
                         .requestMatchers("/").permitAll()
                         .requestMatchers(HttpMethod.POST, BASE_PATH_V1 + "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, BASE_PATH_V1 + "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/workers").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(authenticationJwtFilter, UsernamePasswordAuthenticationFilter.class)

@@ -4,7 +4,7 @@ import feign.auth.BasicAuthRequestInterceptor;
 import feign.codec.Encoder;
 import orchestrator.discord.client.dto.DiscordOAuthTokenRequest;
 import orchestrator.discord.client.dto.DiscordOAuthTokenResponse;
-import orchestrator.discord.oauth.DiscordOAuthProperties;
+import orchestrator.discord.property.DiscordOAuthProperties;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;

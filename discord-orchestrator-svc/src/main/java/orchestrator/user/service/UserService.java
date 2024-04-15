@@ -6,12 +6,15 @@ import orchestrator.user.command.input.UserRegisterInput;
 import orchestrator.user.command.output.UserProfileOutput;
 import orchestrator.user.exception.UserDomainException;
 import orchestrator.user.model.User;
+import orchestrator.user.model.UserAuthority;
+import orchestrator.user.model.UserRole;
 import orchestrator.user.model.mapper.EntityMapper;
 import orchestrator.user.property.UserProperties;
 import orchestrator.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -108,10 +111,14 @@ public class UserService {
     private void initialize(User user) {
 
         final String hashedPassword = passwordEncoder.getHashBase64(user.getPassword());
+        boolean isActive = userProperties.getDefaultAccountState();
+        UserRole defaultRole = userProperties.getDefaultRole();
+        Set<UserAuthority> defaultAuthorities = userProperties.getDefaultAuthorities();
+
         user.setPassword(hashedPassword);
-        user.setActive(userProperties.getDefaultAccountState());
-        user.setRole(userProperties.getDefaultRole());
-        user.setAuthorities(userProperties.getDefaultAuthorities());
+        user.setActive(isActive);
+        user.setRole(defaultRole);
+        user.setAuthorities(defaultAuthorities);
         user.setDiscordAuthorized(false);
     }
 }

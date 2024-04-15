@@ -28,10 +28,10 @@ public class TeamRole {
     @Column(nullable = false)
     private String name;
     private String color;
-    @ElementCollection(targetClass = RoleAbility.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = TeamRoleAbility.class, fetch = FetchType.EAGER)
     @Column(name = "ability", nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private Set<RoleAbility> abilities;
+    private Set<TeamRoleAbility> abilities;
     @Column(nullable = false)
     @CreationTimestamp
     private OffsetDateTime createdOn;

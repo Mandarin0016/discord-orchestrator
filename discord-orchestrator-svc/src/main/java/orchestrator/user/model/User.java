@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 import java.util.Set;
 import java.util.UUID;
 import lombok.*;
+import orchestrator.team.model.TeamRole;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -37,6 +38,13 @@ public class User {
     @Column(name = "authority", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Set<UserAuthority> authorities;
+    @ManyToMany(targetEntity = TeamRole.class, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "team_member_roles",
+            joinColumns = { @JoinColumn(name = "member_id") },
+            inverseJoinColumns = { @JoinColumn(name = "team_role_id") }
+    )
+    private Set<TeamRole> teamRoles;
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
