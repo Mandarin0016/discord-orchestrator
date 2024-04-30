@@ -1,10 +1,12 @@
 package orchestrator.api;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import lombok.extern.slf4j.Slf4j;
+import orchestrator.user.exception.IllegalUserStateException;
 import orchestrator.user.exception.UserDomainException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,9 +21,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 @Slf4j
@@ -30,6 +30,7 @@ public class ExceptionAdvice {
     public static final UUID UNAUTHORIZED_UUID = UUID.fromString("2ba57386-9c30-11ee-8c90-0242ac120002");
     public static final UUID INTERNAL_SERVER_ERROR_UUID = UUID.fromString("7059c87e-9c30-11ee-8c90-0242ac120002");
     public static final UUID BAD_REQUEST_ERROR_UUID = UUID.fromString("1b38fe4a-9c31-11ee-8c90-0242ac120002");
+    public static final UUID FORBIDDEN_ERROR_UUID = UUID.fromString("4bfc3039-07d6-4aac-a68d-8d1fb115c7c4");
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> accessDenied() {
@@ -61,7 +62,13 @@ public class ExceptionAdvice {
     @ExceptionHandler(UserDomainException.class)
     public ResponseEntity<ErrorResponse> badRequest(UserDomainException domainException) {
 
-        return getErrorResponse(INTERNAL_SERVER_ERROR_UUID, INTERNAL_SERVER_ERROR, domainException.getMessage());
+        return getErrorResponse(BAD_REQUEST_ERROR_UUID, BAD_REQUEST, domainException.getMessage());
+    }
+
+    @ExceptionHandler(IllegalUserStateException.class)
+    public ResponseEntity<ErrorResponse> forbidden(IllegalUserStateException e) {
+
+        return getErrorResponse(FORBIDDEN_ERROR_UUID, FORBIDDEN, e.getMessage());
     }
 
     private static ResponseEntity<ErrorResponse> getErrorResponse(UUID responseId, HttpStatus httpStatus, String data) {

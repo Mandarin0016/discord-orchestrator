@@ -28,13 +28,13 @@ public class Package {
     private UUID idempotencyKey;
     @ManyToOne(targetEntity = DiscordServer.class, optional = false)
     @JoinColumn(nullable = false, referencedColumnName = "id", name = "server_id")
-    private UUID serverId;
+    private DiscordServer server;
     @ManyToOne(targetEntity = Worker.class, optional = false)
     @JoinColumn(nullable = false, referencedColumnName = "id", name = "worker_id")
-    private UUID workerId;
+    private Worker worker;
     @ManyToOne(targetEntity = User.class, optional = false)
     @JoinColumn(nullable = false, referencedColumnName = "id", name = "user_id")
-    private UUID userId;
+    private User user;
     @Column(nullable = false)
     private Action action;
     @Column(nullable = false)

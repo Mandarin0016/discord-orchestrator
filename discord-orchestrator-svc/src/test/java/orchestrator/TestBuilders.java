@@ -3,7 +3,7 @@ package orchestrator;
 import orchestrator.discord.client.dto.DiscordOAuthTokenResponse;
 import orchestrator.discord.client.dto.DiscordUser;
 import orchestrator.discord.model.DiscordOAuth;
-import orchestrator.user.model.UserAuthority;
+import orchestrator.user.model.SystemAuthority;
 import orchestrator.user.model.UserRole;
 import orchestrator.user.command.input.UserLoginInput;
 import orchestrator.user.command.input.UserRegisterInput;
@@ -37,7 +37,7 @@ public final class TestBuilders {
                 .username("ivan.ivanov")
                 .email("ivan.ivanov@gtest.com")
                 .password("J1o4r2c3k1!")
-                .authorities(Set.of(UserAuthority.CREATE_DISCORD_SERVER_SETUP_REQUEST))
+                .authorities(Set.of(SystemAuthority.CREATE_DISCORD_SERVER_SETUP_REQUEST))
                 .role(UserRole.USER)
                 .createOn(OffsetDateTime.now())
                 .updatedOn(OffsetDateTime.now())
@@ -60,7 +60,7 @@ public final class TestBuilders {
                 .username("ivan.ivanov")
                 .email("ivan.ivanov@gtest.com")
                 .isActive(true)
-                .authorities(Set.of(UserAuthority.CREATE_DISCORD_SERVER_SETUP_REQUEST))
+                .authorities(Set.of(SystemAuthority.CREATE_DISCORD_SERVER_SETUP_REQUEST))
                 .role(UserRole.USER)
                 .createOn(OffsetDateTime.now())
                 .updatedOn(OffsetDateTime.now());

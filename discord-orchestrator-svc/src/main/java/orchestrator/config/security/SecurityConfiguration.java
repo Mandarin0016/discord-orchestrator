@@ -26,6 +26,8 @@ import static orchestrator.api.Paths.BASE_PATH_V1;
 @EnableConfigurationProperties({JwtSecurityProperties.class})
 public class SecurityConfiguration {
 
+    public static final String REGISTER_URI = BASE_PATH_V1 + "/auth/register";
+    public static final String LOGIN_URI = BASE_PATH_V1 + "/auth/login";
     private final AuthenticationJwtFilter authenticationJwtFilter;
 
     public SecurityConfiguration(AuthenticationJwtFilter authenticationJwtFilter) {
@@ -46,8 +48,8 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers("/").permitAll()
-                        .requestMatchers(HttpMethod.POST, BASE_PATH_V1 + "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, BASE_PATH_V1 + "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, REGISTER_URI).permitAll()
+                        .requestMatchers(HttpMethod.POST, LOGIN_URI).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(authenticationJwtFilter, UsernamePasswordAuthenticationFilter.class)

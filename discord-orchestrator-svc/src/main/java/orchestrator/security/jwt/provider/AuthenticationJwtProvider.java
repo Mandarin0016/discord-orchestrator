@@ -36,7 +36,7 @@ public class AuthenticationJwtProvider implements AuthenticationProvider {
             ((JwtAuthentication) authentication).setMetadata(metadata);
             authentication.setAuthenticated(true);
         } catch (InvalidBearerTokenException e) {
-            throw new UnauthenticatedUserException();
+            authentication.setAuthenticated(false);
         }
 
         return authentication;

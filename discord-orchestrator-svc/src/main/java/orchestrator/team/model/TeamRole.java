@@ -1,10 +1,8 @@
 package orchestrator.team.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import orchestrator.user.model.User;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,8 +11,9 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Builder
 @Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TeamRole {
@@ -24,7 +23,7 @@ public class TeamRole {
     private UUID id;
     @ManyToOne(targetEntity = Team.class, optional = false)
     @JoinColumn(nullable = false, name = "team_id", referencedColumnName = "id")
-    private UUID teamId;
+    private Team team;
     @Column(nullable = false)
     private String name;
     private String color;
@@ -32,10 +31,18 @@ public class TeamRole {
     @Column(name = "ability", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Set<TeamRoleAbility> abilities;
+    @Enumerated(value = EnumType.STRING)
+    private TeamRoleRank roleRank;
     @Column(nullable = false)
     @CreationTimestamp
     private OffsetDateTime createdOn;
     @Column(nullable = false)
     @UpdateTimestamp
     private OffsetDateTime updatedOn;
+    @ManyToOne(targetEntity = User.class, optional = false)
+    @JoinColumn(nullable = false, name = "created_by", referencedColumnName = "id")
+    private User createdBy;
+    @ManyToOne(targetEntity = User.class, optional = false)
+    @JoinColumn(nullable = false, name = "updated_by", referencedColumnName = "id")
+    private User updatedBy;
 }

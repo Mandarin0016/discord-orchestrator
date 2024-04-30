@@ -32,8 +32,9 @@ public class WorkerService {
     @Transactional
     public PackageOutput savePackage(PackageInput packageInputCommand) {
 
+        //TODO: Finish it
         UUID workerId = packageInputCommand.getWorkerId();
-        if (!workerRepository.existsByIdAndEnabledIsTrue(workerId)) {
+        if (!workerRepository.existsByIdAndIsEnabledIsTrue(workerId)) {
             throw new WorkerDomainException("Request attempt to inactive/not existing worker with id=[%s].".formatted(workerId));
         }
 

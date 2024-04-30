@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
-import orchestrator.user.model.UserAuthority;
+import orchestrator.user.model.SystemAuthority;
 import orchestrator.user.model.UserRole;
 
 @Builder
@@ -20,7 +20,7 @@ public class UserProfileOutput {
     private final String email;
     private boolean isActive;
     private UserRole role;
-    private Set<UserAuthority> authorities;
+    private Set<SystemAuthority> authorities;
     private OffsetDateTime createOn;
     private OffsetDateTime updatedOn;
 }

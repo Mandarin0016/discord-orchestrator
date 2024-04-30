@@ -9,5 +9,5 @@ import java.util.UUID;
 @Repository
 public interface WorkerRepository extends JpaRepository<Worker, UUID> {
 
-    boolean existsByIdAndEnabledIsTrue(UUID id);
+    boolean existsByIdAndIsEnabledIsTrue(UUID id);
 }

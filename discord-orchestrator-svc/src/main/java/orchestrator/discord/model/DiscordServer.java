@@ -28,7 +28,7 @@ public class DiscordServer {
     private String discordId;
     @ManyToOne(targetEntity = Team.class)
     @JoinColumn(nullable = false, referencedColumnName = "id", name = "team_id")
-    private UUID teamId;
+    private Team team;
     @Column(nullable = false)
     private String name;
     private String description;

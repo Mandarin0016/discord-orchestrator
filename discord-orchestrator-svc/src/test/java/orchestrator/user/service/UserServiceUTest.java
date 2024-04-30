@@ -1,6 +1,6 @@
 package orchestrator.user.service;
 
-import orchestrator.user.model.UserAuthority;
+import orchestrator.user.model.SystemAuthority;
 import orchestrator.user.model.UserRole;
 import orchestrator.user.command.input.UserLoginInput;
 import orchestrator.user.command.input.UserRegisterInput;
@@ -53,7 +53,7 @@ public class UserServiceUTest {
             boolean accountAlreadyExist = false;
             UserRole accountRole = UserRole.USER;
             String hashedPassword = "hashedPassword";
-            Set<UserAuthority> accountAuthorities = Set.of(UserAuthority.CREATE_DISCORD_SERVER_SETUP_REQUEST);
+            Set<SystemAuthority> accountAuthorities = Set.of(SystemAuthority.CREATE_DISCORD_SERVER_SETUP_REQUEST);
             User savedUser = aRandomUserBuilder()
                     .firstName(registerInput.getFirstName())
                     .lastName(registerInput.getLastName())

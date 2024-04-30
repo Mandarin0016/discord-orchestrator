@@ -1,16 +1,20 @@
 package orchestrator.user.service;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import orchestrator.user.command.input.UserLoginInput;
 import orchestrator.user.command.input.UserRegisterInput;
 import orchestrator.user.command.output.UserProfileOutput;
 import orchestrator.user.exception.UserDomainException;
 import orchestrator.user.model.User;
-import orchestrator.user.model.UserAuthority;
+import orchestrator.user.model.SystemAuthority;
 import orchestrator.user.model.UserRole;
 import orchestrator.user.model.mapper.EntityMapper;
 import orchestrator.user.property.UserProperties;
 import orchestrator.user.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,6 +29,7 @@ public class UserService {
     private final UserProperties userProperties;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
     public UserService(UserRepository userRepository, UserProperties userProperties, PasswordEncoder passwordEncoder) {
 
         this.userRepository = userRepository;
@@ -32,6 +37,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional(Transactional.TxType.SUPPORTS)
     public User getById(UUID userId, boolean lockRequired) {
 
         Optional<User> user;
@@ -83,11 +89,6 @@ public class UserService {
 
         User user = userRepository.findByUsernameOrEmail(loginInputCommand.getUsernameOrEmail(), loginInputCommand.getUsernameOrEmail()).orElseThrow(() -> new UserDomainException("Incorrect username or password."));
 
-        if (!user.isActive()) {
-            log.warn("Deactivated user with id=[%s], email=[%s] attempted login.".formatted(user.getId(), user.getEmail()));
-            throw new UserDomainException("User with id=[%s] is deactivated.".formatted(user.getId()));
-        }
-
         String userPassword = user.getPassword();
         String loginPassword = passwordEncoder.getHashBase64(loginInputCommand.getPassword());
 
@@ -113,7 +114,7 @@ public class UserService {
         final String hashedPassword = passwordEncoder.getHashBase64(user.getPassword());
         boolean isActive = userProperties.getDefaultAccountState();
         UserRole defaultRole = userProperties.getDefaultRole();
-        Set<UserAuthority> defaultAuthorities = userProperties.getDefaultAuthorities();
+        Set<SystemAuthority> defaultAuthorities = userProperties.getDefaultAuthorities();
 
         user.setPassword(hashedPassword);
         user.setActive(isActive);

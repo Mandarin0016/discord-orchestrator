@@ -8,4 +8,5 @@ public enum TeamRoleAbility {
     SUBSCRIBE_TO_WORKER,
     UNSUBSCRIBE_FROM_WORKER,
     MANAGE_WORKER,
+    PRIMARY_OWNER
 }

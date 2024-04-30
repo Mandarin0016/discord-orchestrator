@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 import orchestrator.api.ExceptionAdvice;
-import orchestrator.user.model.UserAuthority;
+import orchestrator.user.model.SystemAuthority;
 import orchestrator.user.model.UserRole;
 import orchestrator.config.JacksonConfiguration;
 import orchestrator.config.security.SecurityConfiguration;
@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static orchestrator.user.model.UserAuthority.DEFAULT_VIEW;
+import static orchestrator.user.model.SystemAuthority.DEFAULT_VIEW;
 
 @Import({
         ExceptionAdvice.class,
@@ -77,12 +77,12 @@ public abstract class ApiTestBase {
         return createValidJwtToken(role, Set.of(DEFAULT_VIEW));
     }
 
-    protected String createValidJwtToken(Set<UserAuthority> authorities) {
+    protected String createValidJwtToken(Set<SystemAuthority> authorities) {
 
         return createValidJwtToken(UserRole.USER, authorities);
     }
 
-    protected String createValidJwtToken(UserRole role, Set<UserAuthority> authorities) {
+    protected String createValidJwtToken(UserRole role, Set<SystemAuthority> authorities) {
 
         UserAuthenticationDetails authenticationDetails = UserAuthenticationDetails.builder()
                 .userId(UUID.randomUUID())

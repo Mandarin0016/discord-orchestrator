@@ -1,6 +1,5 @@
 package orchestrator.api;
 
-import orchestrator.discord.client.DiscordApiClient;
 import orchestrator.discord.property.DiscordOAuthProperties;
 import orchestrator.discord.service.DiscordOAuthService;
 import orchestrator.security.jwt.auth.AuthenticationMetadata;
@@ -17,14 +16,12 @@ import static orchestrator.api.Paths.BASE_PATH_V1;
 @RequestMapping(BASE_PATH_V1 + "/discord/oauth")
 public class DiscordOAuthController {
 
-    private DiscordOAuthProperties discordOAuthProperties;
-    private DiscordOAuthService discordOAuthService;
-    private DiscordApiClient discordApiClient;
+    private final DiscordOAuthProperties discordOAuthProperties;
+    private final DiscordOAuthService discordOAuthService;
 
-    public DiscordOAuthController(DiscordOAuthProperties discordOAuthProperties, DiscordOAuthService discordOAuthService, DiscordApiClient discordApiClient) {
+    public DiscordOAuthController(DiscordOAuthProperties discordOAuthProperties, DiscordOAuthService discordOAuthService) {
         this.discordOAuthProperties = discordOAuthProperties;
         this.discordOAuthService = discordOAuthService;
-        this.discordApiClient = discordApiClient;
     }
 
     @GetMapping("/authorization-uri")
