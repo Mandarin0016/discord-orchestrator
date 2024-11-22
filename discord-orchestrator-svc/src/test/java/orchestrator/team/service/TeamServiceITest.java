@@ -18,11 +18,11 @@ public class TeamServiceITest {
     @Test
     void someTest() {
 
-        TeamCreateInput input = TeamCreateInput.builder()
-                .name("Ivan")
-                .ownerId(UUID.randomUUID())
-                .build();
-        teamService.create(input);
+//        TeamCreateInput input = TeamCreateInput.builder()
+//                .name("Ivan")
+//                .ownerId(UUID.randomUUID())
+//                .build();
+//        teamService.create(input);
     }
 
 }

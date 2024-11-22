@@ -1,8 +1,6 @@
 package orchestrator.user.service;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import orchestrator.user.command.input.UserLoginInput;
 import orchestrator.user.command.input.UserRegisterInput;
@@ -77,7 +75,7 @@ public class UserService {
     public UserProfileOutput register(UserRegisterInput registerInputCommand) {
 
         User userToBeSave = EntityMapper.mapToUser(registerInputCommand);
-        this.validate(userToBeSave);
+        this.validateAlreadyExistingUser(userToBeSave);
         this.initialize(userToBeSave);
         User savedUsed = userRepository.save(userToBeSave);
 
@@ -87,7 +85,8 @@ public class UserService {
 
     public UserProfileOutput login(UserLoginInput loginInputCommand) {
 
-        User user = userRepository.findByUsernameOrEmail(loginInputCommand.getUsernameOrEmail(), loginInputCommand.getUsernameOrEmail()).orElseThrow(() -> new UserDomainException("Incorrect username or password."));
+        User user = userRepository.findByUsernameOrEmail(loginInputCommand.getUsernameOrEmail(), loginInputCommand.getUsernameOrEmail())
+                .orElseThrow(() -> new UserDomainException("Incorrect username or password."));
 
         String userPassword = user.getPassword();
         String loginPassword = passwordEncoder.getHashBase64(loginInputCommand.getPassword());
@@ -100,7 +99,7 @@ public class UserService {
         return EntityMapper.mapToProfileOutput(user);
     }
 
-    private void validate(User user) {
+    private void validateAlreadyExistingUser(User user) {
 
         boolean exist = userRepository.existsByUsernameOrEmail(user.getUsername(), user.getEmail());
 

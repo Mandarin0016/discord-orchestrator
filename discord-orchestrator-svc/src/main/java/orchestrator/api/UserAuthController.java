@@ -1,7 +1,5 @@
 package orchestrator.api;
 
-import jakarta.servlet.Servlet;
-import jakarta.validation.constraints.NotBlank;
 import orchestrator.api.dto.user.UserLogin;
 import orchestrator.api.dto.user.UserRegister;
 import orchestrator.api.mapper.DtoMapper;
